@@ -7,34 +7,27 @@
 //
 
 import UIKit
-
+import HandyJSON
 class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
     /// 列表
     @IBOutlet weak var homeTableView: UITableView!
     
-    var demandsModel: Demands?
+    var demandsModel: DemandsResult?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.homeTableView.rowHeight = 500
         
-        HLBasePresenter.execute(netQuerier: Demands.getNearlyDemand(), success: {[unowned self] (data) in
-            
-            self.demandsModel = Demands.deserialize(from: String(data: data, encoding: .utf8))
-            
-            if self.demandsModel?.error == 0{
-                self.homeTableView.reloadData()
-            }else{
-                
-            }
-        }) { (error) in
+        HLBasePresenter.execute(HandyJSON: DemandsResult.self, querier: HomeNao.getBuyerOrder(), success: {[unowned self] (dvo) in
+            let demands =  dvo as! DemandsResult
+            self.demandsModel = demands
+            self.homeTableView.reloadData()
+        }) { (code, error) in
             
         }
-        
     }
-    
    
 
     
@@ -59,6 +52,8 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
         let cell = tableView.dequeueReusableCell(withIdentifier: "homeCell", for: indexPath) as! HomeTableViewCell
         
         if let model = self.demandsModel {
+            
+            
             cell.contentLabel.text =
             """
             id: \(model.demands![indexPath.row].id!)
@@ -69,9 +64,8 @@ class HomeViewController: UIViewController,UITableViewDelegate,UITableViewDataSo
             latitude: \(model.demands![indexPath.row].latitude!)
             longitude: \(model.demands![indexPath.row].longitude!)
             createTime: \(model.demands![indexPath.row].createTime!)
-            createTime: \(model.demands![indexPath.row].createTime!)
-            price: \(model.demands![indexPath.row].price!)
-            fileDvos.filePath: \(model.demands![indexPath.row].fileDvos?.first?.filePath!)
+            price: \(model.demands![indexPath.row].price)
+            fileDvos.filePath: \(model.demands![indexPath.row].fileDvos?.first?.filePath! ?? "空 path")
             """
         }
 

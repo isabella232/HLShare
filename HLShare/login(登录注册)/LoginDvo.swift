@@ -7,32 +7,12 @@
 //
 
 import UIKit
-
-struct LoginDvo: Codable {
-    
-    
+class LoginDvo: Result{
+    required init() {}
     /// 环信用户名
-    var easemobUserName: String
+    var easemobUserName: String?
     
     /// 环信登录密码
-    var easemobPassword: String
-    
-    ///
-    var token: String
-    
-    /// 状态码
-    var error: Int
-    
-    
-    /// 登录
-    ///
-    /// - Returns: <#return value description#>
-    
-    static func getLoginQuerier(_ userId: String,_ password: String) -> HLBaseNetQuerier {
-        let querier = HLBaseNetQuerier()
-        querier.url = "/user/user!login"
-        querier.param = ["userId":userId,"password":password]
-        return querier
-    }
-    
+    var easemobPassword: String?
+   
 }

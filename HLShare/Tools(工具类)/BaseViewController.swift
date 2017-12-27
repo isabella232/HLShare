@@ -1,41 +1,34 @@
 //
-//  LoginViewController.swift
+//  BaseViewController.swift
 //  HLShare
 //
-//  Created by HLApple on 2017/12/22.
+//  Created by HLApple on 2017/12/27.
 //  Copyright © 2017年 HLApple. All rights reserved.
 //
 
 import UIKit
 
-class LoginViewController: UIViewController {
+extension SwiftNoticeProtocol where Self: UIViewController{
+    func errorHandle(error: String) {
+        let alertController = UIAlertController(title: nil, message: error, preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+        alertController.addAction(cancelAction)
+        self.present(alertController, animated: true, completion: nil)
+    }
+}
+protocol SwiftNoticeProtocol{
+    func errorHandle(error: String)
+}
 
-    var presenter: HLBasePresenter!
-    
+
+class BaseViewController: UIViewController {
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
     }
-    
-    /// 用户登录
-    ///
-    /// - Parameter sender: <#sender description#>
-    @IBAction func userLogin(_ sender: UIButton) {
-        
-        HLBasePresenter.execute(HandyJSON: LoginDvo.self, querier: LoginNao.login("aaaaaa", "111111"), success: {[unowned self] (dvo) in
-            let _ = dvo as! LoginDvo
-            UIApplication.shared.keyWindow?.rootViewController =  self.storyboard?.instantiateViewController(withIdentifier: "MainTabbar")
-           
-            
-        }) { (code,error) in
 
-        }
-    }
-    
-    
-   
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

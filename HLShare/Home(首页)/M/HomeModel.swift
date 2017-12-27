@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import HandyJSON
 
 
 /// 需求方业务管理
@@ -15,20 +14,18 @@ import HandyJSON
 
 
 /// 列出需求
-class Demands: HandyJSON{
+class DemandsResult: Result{
     
     var demands: [Demand]?
     
     /** 总记录 */
     var totalRecords: Int?
-    
+   
     /** 开始位置 */
     var pageStart: Int?
     
-    /** 状态码 */
-    var error: Int!
-    
-    var token: String?
+    /** 结束位置 */
+    var pageStop: Int?
     
     required init() {}
     
@@ -36,6 +33,8 @@ class Demands: HandyJSON{
         
         var fileDvos: [FileDvo]?
         
+        var badeProvision: badeProvision?
+
         /** 需求价格 */
         var price: Float?
         
@@ -43,19 +42,45 @@ class Demands: HandyJSON{
         var badeProvisionCount: Int?
         
         required init() {}
-    }
-    
-    /// 列出需求借口
-    ///
-    /// - Parameters:
-    /// - userId: 用户的用户名,空表示获取当前用户的需求列表，非空表示获取该指定用户发布的需求列表。
-    /// - extra: 1：获取当前用户关注用户的需求列表。2：获取当前用户好友的需求列表。10：获取所有相关用户的需求列表
-    /// - Returns:
-    static func getNearlyDemand(_ userId: String = "",_ extra: Int = 10)-> HLBaseNetQuerier{
-        let querier = HLBaseNetQuerier()
-        querier.url = "/lease/lessee/demand"
-        querier.param = ["userId":userId,"extra":extra]
-        return querier
+        
+        class FileDvo: HLBaseDvo {
+            /**文件路径 */
+            var filePath: String?
+            required init() {}
+
+        }
+        
+        class badeProvision: HLBaseDvo {
+            var saleItem: saleItem?
+            required init() {}
+            
+            class saleItem: HLPoiDvo {
+                /** 好评率 */
+                var  averageScore: Double?
+                
+                /** 价格 */
+                var  price: Float?
+                
+                /** 押金 */
+                var  deposit: Float?
+                
+                /** 库存 */
+                var  stockNum: Int?
+                
+                /** 付款方式 */
+                var  payMode: Int?
+                
+                /** 卖家 */
+                //public String lessorId;
+                var  vendor: UserDvo?
+                
+                var fileDvos:[FileDvo]?
+                
+                required init() {
+                    super.init()
+                }
+            }
+        }
     }
 }
 

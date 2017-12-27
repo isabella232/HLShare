@@ -10,7 +10,7 @@ import Foundation
 import Hue // 颜色库
 import SnapKit // 自动布局
 import SwiftyJSON
-
+import HandyJSON
 
 
 // 屏幕宽、高、状态栏高度
@@ -87,35 +87,37 @@ func gf_Cancel(_ task: Task?) {
     task?(true)
 }
 
+
+
 // 验证码倒计时
 func g_verifyCode_timerSource(sender: UIButton,sceneId: String,mobile: String,interval: Int = 60)  {
-    HLNetworkManager.POST(url: "", param: ["si":"01_0006","sceneId":sceneId,"mobile":mobile], success: { (data) in
-        var timeCount = interval
-        let timer = DispatchSource.makeTimerSource( queue:  DispatchQueue.global())
-        timer.schedule(deadline: .now(), repeating: .seconds(1))
-        timer.setEventHandler {
-            timeCount = timeCount - 1
-            if timeCount <= 0 {
-                timer.cancel()
-                DispatchQueue.main.async {
-                    sender.setTitle("获取验证码", for: .normal)
-                    sender.isEnabled = true
-                }
-            }else{
-                let text = "\(timeCount % 60)" + "s"
-                DispatchQueue.main.async {
-                    UIView.beginAnimations("", context: nil)
-                    UIView.setAnimationDuration(1.0)
-                    sender.setTitle(text, for: .normal)
-                    UIView.commitAnimations()
-                    sender.isEnabled = false
-                }
-            }
-        }
-        timer.resume()
-    }, failure: { (error) in
-        //SwiftNotice.showNoticeWithText(text: error)
-    })
+//    HLNetworkManager.POST(url: "", param: ["si":"01_0006","sceneId":sceneId,"mobile":mobile], success: { (data) in
+//        var timeCount = interval
+//        let timer = DispatchSource.makeTimerSource( queue:  DispatchQueue.global())
+//        timer.schedule(deadline: .now(), repeating: .seconds(1))
+//        timer.setEventHandler {
+//            timeCount = timeCount - 1
+//            if timeCount <= 0 {
+//                timer.cancel()
+//                DispatchQueue.main.async {
+//                    sender.setTitle("获取验证码", for: .normal)
+//                    sender.isEnabled = true
+//                }
+//            }else{
+//                let text = "\(timeCount % 60)" + "s"
+//                DispatchQueue.main.async {
+//                    UIView.beginAnimations("", context: nil)
+//                    UIView.setAnimationDuration(1.0)
+//                    sender.setTitle(text, for: .normal)
+//                    UIView.commitAnimations()
+//                    sender.isEnabled = false
+//                }
+//            }
+//        }
+//        timer.resume()
+//    }, failure: { (error) in
+//        //SwiftNotice.showNoticeWithText(text: error)
+//    })
 }
 
 
